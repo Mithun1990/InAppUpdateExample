@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Android-Calendar-Core" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Livedata-vs-flow" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/migration_info_app/migration_info_app" vcs="Git" />
+  </component>
+</project>
