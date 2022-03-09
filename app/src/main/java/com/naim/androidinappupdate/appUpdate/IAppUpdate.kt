@@ -1,8 +1,14 @@
 package com.naim.androidinappupdate.appUpdate
 
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.tasks.Task
+
 interface IAppUpdate {
-    fun onImmediateUpdate()
-    fun onFlexibleUpdate()
+    fun onImmediateUpdate(appUpdateInfo: AppUpdateInfo)
+    fun onFlexibleUpdate(appUpdateInfo: AppUpdateInfo)
     fun onDownloadInProgress()
-    fun onResumeUpdate()
+    fun onResumeUpdate(appUpdateInfo: AppUpdateInfo)
+    var appUpdateManagerFactory: AppUpdateManager?
+    var appUpdateInfoTaskInfo: Task<AppUpdateInfo>?
 }
