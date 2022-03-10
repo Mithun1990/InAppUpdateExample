@@ -30,7 +30,7 @@ class InAppUpdateManager constructor(
                 appUpdateInfo,
                 AppUpdateType.IMMEDIATE,
                 it,
-                UpdateConstants.RESULT_CODE
+                UpdateConstants.IMMEDIATE_RESULT_CODE
             )
         }
     }
@@ -41,7 +41,7 @@ class InAppUpdateManager constructor(
                 appUpdateInfo,
                 AppUpdateType.FLEXIBLE,
                 it,
-                UpdateConstants.RESULT_CODE
+                UpdateConstants.FLEXIBLE_RESULT_CODE
             )
         }
     }
@@ -60,7 +60,7 @@ class InAppUpdateManager constructor(
                 appUpdateInfo,
                 AppUpdateType.IMMEDIATE,
                 it,
-                UpdateConstants.RESULT_CODE
+                UpdateConstants.IMMEDIATE_RESULT_CODE
             )
         }
     }

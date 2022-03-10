@@ -32,12 +32,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == UpdateConstants.RESULT_CODE) {
+        if (requestCode == UpdateConstants.FLEXIBLE_RESULT_CODE) {
             if (resultCode != RESULT_OK) {
-                println("Already App update impl called Failure")
-//                Log.e("MY_APP", "Update flow failed! Result code: $resultCode")
-                // If the update is cancelled or fails,
-                // you can request to start the update again.
+                println("App update impl called Failure")
+            }
+        } else if (requestCode == UpdateConstants.IMMEDIATE_RESULT_CODE) {
+            if (resultCode != RESULT_OK) {
+                println("App update impl called Failure")
+                finish()
             }
         }
     }

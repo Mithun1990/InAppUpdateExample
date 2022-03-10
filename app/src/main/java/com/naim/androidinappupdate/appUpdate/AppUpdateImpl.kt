@@ -24,6 +24,9 @@ class AppUpdateImpl(
                 installState.installStatus() == InstallStatus.DOWNLOADED -> {
                     iAppUpdate.onDownloadCompleted()
                 }
+                installState.installStatus() == InstallStatus.INSTALLED -> {
+                    listener?.let { iAppUpdate.appUpdateManagerFactory?.unregisterListener(it) }
+                }
             }
         }
     }
