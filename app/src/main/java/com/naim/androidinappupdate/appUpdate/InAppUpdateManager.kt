@@ -1,7 +1,6 @@
 package com.naim.androidinappupdate.appUpdate
 
 import android.app.Activity
-import android.widget.ProgressBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -11,7 +10,10 @@ import com.google.android.play.core.tasks.Task
 import com.naim.androidinappupdate.R
 import java.lang.ref.WeakReference
 
-class InAppUpdateManager constructor(private val context: WeakReference<Activity>) : IAppUpdate {
+class InAppUpdateManager constructor(
+    private val context: WeakReference<Activity>,
+    private val appUpdateEvent: (AppUpdateEvent) -> Unit = {}
+) : IAppUpdate {
     private var _appUpdateManagerFactory: AppUpdateManager? = null
     private var _appUpdateInfo: Task<AppUpdateInfo>? = null
 
@@ -45,15 +47,7 @@ class InAppUpdateManager constructor(private val context: WeakReference<Activity
     }
 
     override fun onDownloadInProgress(downloadedBytes: Long, totalBytes: Long) {
-        try {
-            getActivity()?.let {
-                val progressBar = it.findViewById<ProgressBar>(R.id.progress_horizontal)
-                progressBar.progress = downloadedBytes.toInt()
-                progressBar.max = totalBytes.toInt()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        appUpdateEvent.invoke(AppUpdateEvent.AppUpdateDownloading(downloadedBytes, totalBytes))
     }
 
     override fun onDownloadCompleted() {
@@ -71,6 +65,10 @@ class InAppUpdateManager constructor(private val context: WeakReference<Activity
         }
     }
 
+    override fun onException(it: Exception) {
+        appUpdateEvent.invoke(AppUpdateEvent.AppUpdateException(it))
+    }
+
     override var appUpdateManagerFactory: AppUpdateManager? = _appUpdateManagerFactory
 
     override var appUpdateInfoTaskInfo: Task<AppUpdateInfo>? = _appUpdateInfo
@@ -86,7 +84,10 @@ class InAppUpdateManager constructor(private val context: WeakReference<Activity
                 "An update has just been downloaded.",
                 Snackbar.LENGTH_INDEFINITE
             ).apply {
-                setAction("RESTART") { _appUpdateManagerFactory?.completeUpdate() }
+                setAction("RESTART") {
+                    appUpdateEvent.invoke(AppUpdateEvent.AppUpdateComplete)
+                    _appUpdateManagerFactory?.completeUpdate()
+                }
                 show()
             }
         }

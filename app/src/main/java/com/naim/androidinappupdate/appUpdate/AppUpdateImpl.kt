@@ -13,6 +13,7 @@ class AppUpdateImpl(
     private var listener: InstallStateUpdatedListener? = null
 
     init {
+        println("App update impl called")
         listener = InstallStateUpdatedListener { installState ->
             when {
                 installState.installStatus() == InstallStatus.DOWNLOADING -> {
@@ -28,7 +29,9 @@ class AppUpdateImpl(
     }
 
     override fun checkUpdate() {
+        println("Already App update impl called")
         iAppUpdate.appUpdateInfoTaskInfo?.addOnSuccessListener { appUpdateInfo ->
+            println("Already App update impl called appUpdateInfo")
             when {
                 appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                         && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) -> {
@@ -42,7 +45,13 @@ class AppUpdateImpl(
                 appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS -> {
                     iAppUpdate.onResumeUpdate(appUpdateInfo)
                 }
+                else -> {
+                    println("Already App update impl called")
+                }
             }
+        }
+        iAppUpdate.appUpdateInfoTaskInfo?.addOnFailureListener {
+            iAppUpdate.onException(it)
         }
     }
 

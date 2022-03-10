@@ -10,6 +10,7 @@ interface IAppUpdate {
     fun onDownloadInProgress(downloadedBytes: Long, totalBytes: Long)
     fun onDownloadCompleted()
     fun onResumeUpdate(appUpdateInfo: AppUpdateInfo)
+    fun onException(it: Exception)
     var appUpdateManagerFactory: AppUpdateManager?
     var appUpdateInfoTaskInfo: Task<AppUpdateInfo>?
 }
