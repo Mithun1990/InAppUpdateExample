@@ -1,11 +1,14 @@
 package com.naim.androidinappupdate.appUpdate
 
 import android.app.Activity
+import android.widget.ProgressBar
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.tasks.Task
+import com.naim.androidinappupdate.R
 import java.lang.ref.WeakReference
 
 class InAppUpdateManager constructor(private val context: WeakReference<Activity>) : IAppUpdate {
@@ -41,8 +44,20 @@ class InAppUpdateManager constructor(private val context: WeakReference<Activity
         }
     }
 
-    override fun onDownloadInProgress() {
-        TODO("Not yet implemented")
+    override fun onDownloadInProgress(downloadedBytes: Long, totalBytes: Long) {
+        try {
+            getActivity()?.let {
+                val progressBar = it.findViewById<ProgressBar>(R.id.progress_horizontal)
+                progressBar.progress = downloadedBytes.toInt()
+                progressBar.max = totalBytes.toInt()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onDownloadCompleted() {
+        popupSnackbarForCompleteUpdate()
     }
 
     override fun onResumeUpdate(appUpdateInfo: AppUpdateInfo) {
@@ -64,4 +79,16 @@ class InAppUpdateManager constructor(private val context: WeakReference<Activity
         return context.get()
     }
 
+    private fun popupSnackbarForCompleteUpdate() {
+        getActivity()?.let {
+            Snackbar.make(
+                it.findViewById(R.id.activity_main_layout),
+                "An update has just been downloaded.",
+                Snackbar.LENGTH_INDEFINITE
+            ).apply {
+                setAction("RESTART") { _appUpdateManagerFactory?.completeUpdate() }
+                show()
+            }
+        }
+    }
 }

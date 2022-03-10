@@ -7,7 +7,8 @@ import com.google.android.play.core.tasks.Task
 interface IAppUpdate {
     fun onImmediateUpdate(appUpdateInfo: AppUpdateInfo)
     fun onFlexibleUpdate(appUpdateInfo: AppUpdateInfo)
-    fun onDownloadInProgress()
+    fun onDownloadInProgress(downloadedBytes: Long, totalBytes: Long)
+    fun onDownloadCompleted()
     fun onResumeUpdate(appUpdateInfo: AppUpdateInfo)
     var appUpdateManagerFactory: AppUpdateManager?
     var appUpdateInfoTaskInfo: Task<AppUpdateInfo>?
