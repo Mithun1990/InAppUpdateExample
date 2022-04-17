@@ -31,17 +31,22 @@ class AppUpdateImpl(
         }
     }
 
-    override fun checkUpdate() {
+    override fun checkUpdate(isForceUpdate: Boolean) {
         println("Already App update impl called")
         iAppUpdate.appUpdateInfoTaskInfo?.addOnSuccessListener { appUpdateInfo ->
             println("Already App update impl called appUpdateInfo")
             when {
+                /*
+                isForceUpdate is used explicitly as google play did not
+                include any option to distinguish immediate or flexible release
+                by adding isForceUpdate this code will be worked if google play add any option
+                 */
                 appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) -> {
+                        && (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE) || isForceUpdate) -> {
                     iAppUpdate.onImmediateUpdate(appUpdateInfo)
                 }
                 appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                        appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
+                        (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE) || !isForceUpdate)
                     /*&& (appUpdateInfo.clientVersionStalenessDays() ?: -1) >= 5*/ -> {
                     iAppUpdate.onFlexibleUpdate(appUpdateInfo)
                 }

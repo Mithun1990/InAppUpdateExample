@@ -9,6 +9,7 @@ import java.lang.ref.WeakReference
 
 class MainActivity : AppCompatActivity() {
     var appUpdate: AppUpdate? = null
+    var isForceUpdate = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,7 +47,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        appUpdate?.checkUpdate()
+        /*
+           isForceUpdate is used explicitly as google play did not
+           include any option to distinguish immediate or flexible release
+           by adding isForceUpdate this code will be worked if google play add any option
+         */
+        appUpdate?.checkUpdate(isForceUpdate)
     }
 
     override fun onStart() {
